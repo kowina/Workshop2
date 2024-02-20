@@ -14,16 +14,16 @@ public class MainDao {
       //  user.setPassword("asdfg");
        // System.out.println(user.toString());
         UserDao userDao = new UserDao();
-        User user = userDao.read(24);
-        System.out.println(user);
-        user.setUserName("Leon");
-        user.setEmail("jhgfd");
-        user.setPassword("kjhgfd");
-        userDao.update(user);
-
+       // User user = userDao.read(1);
+       // System.out.println(user);
+       // user.setUserName("Leon");
+       // user.setEmail("jhgfd");
+       // user.setPassword("kjhgfd");
+       // userDao.update(user);
         //userDao.read(22);
         //User user = userDao.read(2);
         //System.out.println(userDao.read(4).toString());
-        System.out.println(userDao.read(24));
+       // System.out.println(userDao.read(24));
+        userDao.delete(18);
     }
 }
