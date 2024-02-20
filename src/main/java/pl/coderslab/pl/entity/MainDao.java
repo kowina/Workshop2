@@ -8,14 +8,15 @@ public class MainDao {
      //User user = new User("Mateusz", "kowina@gazeta.pl", "paswword1");
      //User user1 = new User("Tomasz", "codso@wp.pl", "pass2");
       //  User user = new User("Witold", "f@gjjjh","pass2");
-        User user = new User();
-        user.setUserName("Kuba");
-        user.setEmail("sdsdh@hgj");
-        user.setPassword("asdfg");
-        System.out.println(user.toString());
+       // User user = new User();
+       // user.setUserName("Kuba");
+      // user.setEmail("sdsdh@hgj");
+      //  user.setPassword("asdfg");
+       // System.out.println(user.toString());
         UserDao userDao = new UserDao();
-
-        userDao.create(user);
-        System.out.println(user.toString());
+        //userDao.read(22);
+        //User user = userDao.read(2);
+        //System.out.println(userDao.read(4).toString());
+        System.out.println(userDao.read(3));
     }
 }
