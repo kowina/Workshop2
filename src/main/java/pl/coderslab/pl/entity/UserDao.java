@@ -10,8 +10,7 @@ public class UserDao {
 
     private static final String CREATE_USER_QUERY = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
     private static final String RETURN_GENERATED_KEY_QUERY = "SELECT id FROM users ORDER BY id DESC LIMIT 1 ";
-
-
+    private static final String READ_USER_BY_ID_QUERY ="SELECT * FROM users WHERE id = ?;";
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
@@ -36,6 +35,25 @@ public class UserDao {
             e.printStackTrace();
             return null;
         }
+    }
+    public User read(int userId){
+        try (Connection connection = DbUtil.getConnection()){
+            PreparedStatement prSt = connection.prepareStatement(READ_USER_BY_ID_QUERY);
+            prSt.setInt(1, userId);
+            ResultSet rs = prSt.executeQuery();
+            User user = new User();
+            while (rs.next()){
+                user.setId(rs.getInt("id"));
+                user.setUserName(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+            }return user;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+
+
     }
 
 
