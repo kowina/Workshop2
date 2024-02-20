@@ -11,6 +11,7 @@ public class UserDao {
     private static final String CREATE_USER_QUERY = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
     private static final String RETURN_GENERATED_KEY_QUERY = "SELECT id FROM users ORDER BY id DESC LIMIT 1 ";
     private static final String READ_USER_BY_ID_QUERY ="SELECT * FROM users WHERE id = ?;";
+    private static final String UPDATE_USER_QUERY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?;";
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
@@ -53,7 +54,19 @@ public class UserDao {
             return null;
         }
 
+    }
+    public void update(User user){
+        try (Connection connection = DbUtil.getConnection()){
+            PreparedStatement prSt = connection.prepareStatement(UPDATE_USER_QUERY);
+            prSt.setString(1, user.getUserName());
+            prSt.setString(2, user.getEmail());
+            prSt.setString(3, hashPassword(user.getPassword()));
+            prSt.setInt(4, user.getId());
+            prSt.executeUpdate();
 
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
 
