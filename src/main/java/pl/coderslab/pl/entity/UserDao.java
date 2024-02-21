@@ -1,18 +1,17 @@
 package pl.coderslab.pl.entity;
-
 import org.mindrot.jbcrypt.BCrypt;
-
 import java.sql.*;
+import java.util.Arrays;
 
 public class UserDao {
     public static final String RED = "\033[0;31m";
     public static final String RESET = "\033[0m";
-
     private static final String CREATE_USER_QUERY = "INSERT INTO users(username, email, password) VALUES (?, ?, ?)";
     private static final String RETURN_GENERATED_KEY_QUERY = "SELECT id FROM users ORDER BY id DESC LIMIT 1 ";
     private static final String READ_USER_BY_ID_QUERY ="SELECT * FROM users WHERE id = ?;";
     private static final String UPDATE_USER_QUERY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?;";
     private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?;";
+    private static final String FIND_ALL_QUERY = "SELECT id FROM users ORDER BY id;";
     public String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
@@ -54,7 +53,6 @@ public class UserDao {
             e.printStackTrace();
             return null;
         }
-
     }
     public void update(User user){
         try (Connection connection = DbUtil.getConnection()){
@@ -79,6 +77,29 @@ public class UserDao {
             e.printStackTrace();
         }
     }
-
+    public User[] findAll(){
+        try (Connection connection = DbUtil.getConnection()){
+            Statement stm = connection.createStatement();
+            ResultSet rs = stm.executeQuery(FIND_ALL_QUERY);
+            User[] users = new User[0];
+            UserDao userDao = new UserDao();
+            while (rs.next()) {
+            users = userDao.addToArray(userDao.read(rs.getInt("id")), users);
+            }
+            return users;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }return null;
+    }
+    public User[] addToArray(User u, User[] users){
+        User[] tempUsers = Arrays.copyOf(users, users.length +1);
+        tempUsers[tempUsers.length - 1] = u;
+        return tempUsers;
+    }
+    public void readArray(User[] users){
+        for (User u : users){
+            System.out.println(u);
+        }
+    }
 
 }
